@@ -32,9 +32,19 @@ You will see the following logged to your console:
 
 ````javascript
 test - {val:"testing"}
-test - "TESTING"
+test - "testing"
 test - [1, 2, 3]
 ````
+
+## API
+
+#### `TransformConsole(options, tag)`
+
+* `options` Standard stream options object
+
+* `tag` String
+
+Creates a console transform stream that will prepend it's output with `tag`
 
 ## License - MIT
 

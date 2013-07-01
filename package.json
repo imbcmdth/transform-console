@@ -1,6 +1,6 @@
 {
   "name": "transform-console",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Log a stream to the console. Implemented as a transform to allow a peek into a pipeline.",
   "main": "index.js",
   "repository": {
