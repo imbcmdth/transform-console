@@ -21,30 +21,51 @@ var TransformConsole = require('transform-console');
 ## Quick Example
 
 ````javascript
-var myLogger = new TransformConsole({ objectMode: true }, "test");
+var myLogger = new TransformConsole({
+	objectMode: true,
+	console: {
+		dataLogger: function(data) {
+			console.log('myLogger -', data);
+		},
+		events: ['finish']
+	}
+});
 
 myLogger.write({val: "testing"});
 myLogger.write("testing");
 myLogger.write([1, 2, 3]);
+
+myLogger.end();
 ````
 
 You will see the following logged to your console:
 
 ````javascript
-test - {val:"testing"}
-test - "testing"
-test - [1, 2, 3]
+myLogger - { val: "testing" }
+myLogger - "testing"
+myLogger - [1, 2, 3]
+finish
 ````
 
 ## API
 
-#### `TransformConsole(options, tag)`
+#### `TransformConsole(options)`
 
-* `options` Standard stream options object
+* `options` Standard stream options object that can also include an optional `console` object. See below for more on the `console` object.
 
-* `tag` String
+##### options.console
 
-Creates a console transform stream that will prepend it's output with `tag`
+`dataLogger` Function(chunk, encoding)
+
+Specify to log the contents of `chunk` (Object, Buffer, or string).
+
+`eventLogger` Function(name, eventData)
+
+Specify to log the events specified in the `events` array.
+
+`events` Array of strings
+
+List of events to listen for and log.
 
 ## License - MIT
 
