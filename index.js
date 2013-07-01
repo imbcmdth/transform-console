@@ -5,15 +5,27 @@ var stream = require('stream'),
 
 module.exports = TransformConsole;
 
-var events = [
-	"close",
-	"end",
-	"finish"
-];
+var defaultEvents = ['end'];
 
-function TransformConsole(options, tag) {
+var defaultTag = '';
+
+var defaultDataLogger = function (thing, encoding) {
+	console.log(thing);
+};
+
+var defaultEventLogger = function (name, event) {
+	console.log(name);
+};
+
+function TransformConsole (options) {
 	stream.Transform.call(this, options);
-	this.tag = tag;
+
+	var consoleOpts = options.console || {};
+
+	this.dataLogger = consoleOpts.dataLogger || defaultDataLogger;
+	this.eventLogger = consoleOpts.eventLogger || defaultEventLogger;
+
+	var events = consoleOpts.events || defaultEvents;
 
 	events.forEach(function(event){
 		this._logEvent(event, this.tag);
@@ -22,14 +34,15 @@ function TransformConsole(options, tag) {
 
 util.inherits(TransformConsole, stream.Transform);
 
-TransformConsole.prototype._logEvent = function _logEvent (name, tag) {
-	this.on(name, function() {
-		console.log(this.tag, "-", name);
-	});
+TransformConsole.prototype._logEvent = function _logEvent (name) {
+	this.on(name, function(event) {
+		this.eventLogger(name, event);
+	}.bind(this));
 };
 
-TransformConsole.prototype._transform = function(chunk, encoding, callback) {
-	console.log(this.tag, "-", chunk);
+TransformConsole.prototype._transform = function (chunk, encoding, done) {
+	this.dataLogger(chunk, encoding);
+
 	this.push(chunk);
-	callback();
+	done();
 };
