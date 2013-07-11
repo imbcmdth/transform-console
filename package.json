@@ -1,7 +1,7 @@
 {
   "name": "transform-console",
-  "version": "0.0.4",
-  "description": "Log a stream to the console. Implemented as a transform to allow a peek into a pipeline.",
+  "version": "0.0.5",
+  "description": "Log a stream to the console. Implemented on top of transform-expected to allow a very flexible way to peek into a pipeline.",
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -12,16 +12,43 @@
     "logging",
     "stream",
     "transform",
+    "transform-expected",
     "log"
   ],
+  "dependencies": {
+    "transform-expected": ">=0.0.3"
+  },
   "devDependencies": {
+    "mocha":  ">=1.8.1"
   },
   "author": {
     "name": "Jon-Carlos Rivera",
     "email": "jon.carlos.rivera@gmail.com",
     "url": "http://jon-carlos.com"
   },
+  "testling": {
+    "files": "test/*-test.js",
+    "browsers": [
+      "iexplore/9.0",
+      "iexplore/10.0",
+      "chrome/5.0",
+      "chrome/23.0",
+      "chrome/canary",
+      "firefox/4.0",
+      "firefox/17.0",
+      "firefox/nightly",
+      "safari/5.0.5",
+      "safari/5.1",
+      "safari/6.0",
+      "opera/12.0",
+      "opera/next",
+      "iphone/6.0",
+      "ipad/6.0"
+    ],
+    "harness": "mocha"
+  },
   "scripts": {
+    "test": "./node_modules/mocha/bin/mocha test"
   },
   "license": "MIT",
   "engine": {

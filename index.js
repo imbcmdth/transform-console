@@ -1,6 +1,6 @@
 'use strict';
 
-var stream = require('stream'),
+var TransformExpected = require('transform-expected'),
     util = require('util');
 
 module.exports = TransformConsole;
@@ -17,8 +17,8 @@ var defaultEventLogger = function (name, event) {
 	console.log(name);
 };
 
-function TransformConsole (options) {
-	stream.Transform.call(this, options);
+function TransformConsole (options, expectation) {
+	TransformExpected.call(this, options, expectation);
 
 	var consoleOpts = options.console || {};
 
@@ -32,7 +32,9 @@ function TransformConsole (options) {
 	}, this);
 }
 
-util.inherits(TransformConsole, stream.Transform);
+util.inherits(TransformConsole, TransformExpected);
+
+TransformConsole.expect = TransformExpected.expect;
 
 TransformConsole.prototype._logEvent = function _logEvent (name) {
 	this.on(name, function(event) {
@@ -40,7 +42,7 @@ TransformConsole.prototype._logEvent = function _logEvent (name) {
 	}.bind(this));
 };
 
-TransformConsole.prototype._transform = function (chunk, encoding, done) {
+TransformConsole.prototype._expected = function (chunk, encoding, done) {
 	this.dataLogger(chunk, encoding);
 
 	this.push(chunk);
